@@ -8,7 +8,6 @@ class SudokuApp:
         self.master = master
         self.master.title("Sudoku App")
 
-        # Sudoku board initialization
         self.board = [[0] * 9 for _ in range(9)]
         self.generate_sudoku()
 
@@ -39,29 +38,21 @@ class SudokuApp:
         self.update_board()
 
     def generate_sudoku(self):
-        # Sudoku generation algorithm
-        # You can implement a different generation algorithm if desired
-
-        # Fill the board with empty values
         self.board = [[0] * 9 for _ in range(9)]
 
-        # Fill the diagonal 3x3 with unique numbers
         for i in range(3):
             nums = random.sample(range(1, 10), 9)
             for j in range(3):
                 self.board[i * 3 + j][i * 3 + j] = nums[i * 3 + j]
 
-        # Solve the board
         self.solve_sudoku()
 
-        # Remove a random number from each cell
         for _ in range(45):
             row = random.randint(0, 8)
             col = random.randint(0, 8)
             self.board[row][col] = 0
 
     def update_board(self):
-        # Update the displayed state of the board
         for i in range(9):
             for j in range(9):
                 value = self.board[i][j]
@@ -71,13 +62,11 @@ class SudokuApp:
                     self.buttons[i][j].config(text="", state=NORMAL)
 
     def number_button_click(self, row, col):
-        # Handle number button click
         value = self.buttons[row][col].cget("text")
         if value != "":
             messagebox.showinfo("Error", "This cell is already filled.")
             return
 
-        # Dialog window to enter a value
         dialog = Toplevel(self.master)
         dialog.title("Enter a value")
 
@@ -88,7 +77,6 @@ class SudokuApp:
         submit_button.pack(pady=5)
 
     def set_cell_value(self, row, col, value, dialog):
-        # Set the value in the cell
         if not value.isdigit() or int(value) not in range(1, 10):
             messagebox.showinfo("Error", "Enter a number from 1 to 9.")
         else:
@@ -97,7 +85,6 @@ class SudokuApp:
             dialog.destroy()
 
     def check_solution(self):
-        # Check the correctness of the solution
         solution = [[self.board[i][j] for j in range(9)] for i in range(9)]
         if self.solve_sudoku(solution):
             if solution == self.board:
@@ -108,7 +95,6 @@ class SudokuApp:
             messagebox.showinfo("Incorrect", "Cannot solve the sudoku.")
 
     def solve_sudoku(self, board=None):
-        # Solve the sudoku (backtracking algorithm)
         if board is None:
             board = self.board
 
@@ -127,7 +113,6 @@ class SudokuApp:
         return False
 
     def solve_and_show_solution(self):
-        # Solve the sudoku and display the solution
         solution = [[self.board[i][j] for j in range(9)] for i in range(9)]
         if self.solve_sudoku(solution):
             self.board = solution
@@ -144,7 +129,6 @@ class SudokuApp:
         return None
 
     def is_valid_move(self, board, row, col, num):
-        # Check if a number can be placed in a cell
         for i in range(9):
             if board[row][i] == num or board[i][col] == num:
                 return False
@@ -159,7 +143,6 @@ class SudokuApp:
         return True
 
     def save_as_image(self):
-        # Save the board as a PNG image
         image_size = 400
         cell_size = image_size // 9
         image = Image.new("RGB", (image_size, image_size), "white")
@@ -182,7 +165,6 @@ class SudokuApp:
         image.save("sudoku.png")
         messagebox.showinfo("Saved", "Board saved as sudoku.png.")
 
-# Initialize the application
 root = Tk()
 sudoku_app = SudokuApp(root)
 root.mainloop()
